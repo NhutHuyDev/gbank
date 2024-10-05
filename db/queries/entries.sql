@@ -6,7 +6,7 @@ RETURNING *;
 -- name: GetEntry :one
 SELECT * FROM entries WHERE id = $1 LIMIT 1;
 
--- name: ListEntry :one
+-- name: ListEntry :many
 SELECT * FROM entries
 WHERE account_id = $1
 ORDER BY id
