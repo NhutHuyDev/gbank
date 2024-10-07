@@ -8,10 +8,10 @@ dropdb:
 	docker exec -it sgbankpg12 dropdb sgbank
 
 migrateup:
-	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/praticeisolationlevel?sslmode=disable" -verbose up 
+	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose up 
 
 migratedown:
-	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/praticeisolationlevel?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
