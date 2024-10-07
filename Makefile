@@ -22,4 +22,7 @@ test:
 server:
 	go run ./cmd/sgbank/main.go
 
+mock:
+	mockgen -package mockdb -destination internal/infra/db/mock/store.go github.com/NhutHuyDev/sgbank/internal/infra/db Store
+
 .PHONY: posgres createdb dropdb migrateup migratedown sqlc test server

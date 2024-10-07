@@ -41,6 +41,10 @@ type getAccountDTO struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+type getAccountRes struct {
+	Account db.Account `json:"account"`
+}
+
 func (server *Server) getAccountHandler(ctx *gin.Context) {
 	var req getAccountDTO
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -59,8 +63,8 @@ func (server *Server) getAccountHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"account": account,
+	ctx.JSON(http.StatusOK, getAccountRes{
+		Account: account,
 	})
 }
 
