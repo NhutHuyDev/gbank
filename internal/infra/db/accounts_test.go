@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	random_utils "github.com/NhutHuyDev/sgbank/pkg"
+	"github.com/NhutHuyDev/sgbank/pkg/utils"
 	"github.com/stretchr/testify/require"
 )
 
 func createRandomAccount(t *testing.T) Account {
 	params := CreateAccountParams{
-		Owner:    random_utils.RandomOwner(),
-		Balance:  int64(random_utils.RandomMoney()),
-		Currency: random_utils.RandomCurrency(),
+		Owner:    utils.RandomOwner(),
+		Balance:  int64(utils.RandomMoney()),
+		Currency: utils.RandomCurrency(),
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), params)
@@ -56,7 +56,7 @@ func TestUpdateAccount(t *testing.T) {
 
 	params := UpdatedAccountParams{
 		ID:      account1.ID,
-		Balance: int64(random_utils.RandomMoney()),
+		Balance: int64(utils.RandomMoney()),
 	}
 
 	account2, err := testQueries.UpdatedAccount(context.Background(), params)

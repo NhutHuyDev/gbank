@@ -1,0 +1,11 @@
+version: "2"
+sql:
+  - engine: postgresql
+    schema: "./db/migration"
+    queries: "./db/queries"
+    gen:
+      go:
+        emit_json_tags: true
+        emit_empty_slices: true
+        emit_interface: true
+        out: "internal/infra/db"    

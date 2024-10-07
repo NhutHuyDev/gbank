@@ -6,21 +6,21 @@ import (
 	"os"
 	"testing"
 
+	"github.com/NhutHuyDev/sgbank/pkg/utils"
 	_ "github.com/lib/pq"
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable"
 )
 
 var testQueries *Queries
 var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	var err error
+	config, err := utils.LoadConfig("../../../", "app")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
 
-	testDB, err = sql.Open(dbDriver, dbSource)
+	}
+
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 
 	if err != nil {
 		log.Fatal("cannot connect to db: ", err)
