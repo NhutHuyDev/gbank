@@ -10,8 +10,14 @@ dropdb:
 migrateup:
 	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose up 
 
+migrateup1:
+	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose up 1
+
 migratedown:
 	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose down
+
+migratedown1:
+	migrate -path db/migration -database "postgres://root:secret@127.0.0.1:5432/sgbank?sslmode=disable" -verbose down 1 
 
 sqlc:
 	sqlc generate
@@ -25,4 +31,4 @@ server:
 mock:
 	mockgen -package mockdb -destination internal/infra/db/mock/store.go github.com/NhutHuyDev/sgbank/internal/infra/db Store
 
-.PHONY: posgres createdb dropdb migrateup migratedown sqlc test server
+.PHONY: posgres createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test server
