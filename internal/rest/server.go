@@ -1,22 +1,34 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/NhutHuyDev/sgbank/internal/infra/db"
+	"github.com/NhutHuyDev/sgbank/internal/token"
+	"github.com/NhutHuyDev/sgbank/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config     utils.Config
+	store      db.Store
+	tokenMaker token.Maker
+	router     *gin.Engine
 }
 
-func NewServer(store db.Store) *Server {
+func NewServer(config utils.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
+
 	server := &Server{
-		store: store,
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
 	}
 
 	router := gin.Default()
@@ -33,16 +45,19 @@ func NewServer(store db.Store) *Server {
 		})
 	})
 	router.POST("/users", server.createUserHandler)
+	router.POST("/users/sign-in", server.signInHandler)
 
-	router.GET("/accounts/:id", server.getAccountHandler)
-	router.GET("/accounts", server.listAccountsHandler)
-	router.POST("/accounts", server.createAccountHandler)
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
-	router.POST("/transfers", server.transferHandler)
+	authRoutes.GET("/accounts/:id", server.getAccountHandler)
+	authRoutes.GET("/accounts", server.listAccountsHandler)
+	authRoutes.POST("/accounts", server.createAccountHandler)
+
+	authRoutes.POST("/transfers", server.transferHandler)
 
 	server.router = router
 
-	return server
+	return server, nil
 }
 
 func (server *Server) StartServer(address string) error {
