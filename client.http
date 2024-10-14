@@ -1,0 +1,55 @@
+### GET: /healthz
+GET http://localhost:8080/v1/healthz HTTP/1.1
+content-type: application/json
+
+### POST: /users
+POST http://localhost:8080/v1/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "nhhuy2002",
+    "full_name": "Nguyen Nhut Huy",
+    "email": "nguyennhuthuy02@gmail.com",
+    "password": "9999999"
+}
+
+### POST: /users/sign-in
+POST http://localhost:8080/v1/users/sign-in HTTP/1.1
+content-type: application/json
+
+{
+    "username": "nhhuy2002",
+    "password": "9999999"
+}
+
+### POST: /accounts
+POST http://localhost:8080/v1/accounts HTTP/1.1
+content-type: application/json
+authorization: Bearer v2.local.dI37w7UkQizjNYClAIEC4CZuWrDenubM4azBjHqeUpJwSsqwanZz0cwK8YOzfezimSN1-sNHapgfhA1nd-qnuccb11jD9yo78nj8amWHYP5jNT6iScsoE-1P2twfGbMgh4yT5Gp8sczpdTaBkkP5B7YfpZi3xJMs5qhvmzDzfqX1yH3MUs_WvMnCIMBxRzRJ_0MP2jUZ3-7_vVP9CUqwuGvjIWgMDc4RlgWkG76n0SLv5dJb3LIo_nof5XsANZeRpkFr7sU8cXvJ_ZRk7JkRmw.bnVsbA
+
+{
+    "Currency": "CAD"
+}
+
+### GET: /accounts
+GET http://localhost:8080/v1/accounts?page_id=1&page_size=5 HTTP/1.1
+content-type: application/json
+authorization: Bearer v2.local.dI37w7UkQizjNYClAIEC4CZuWrDenubM4azBjHqeUpJwSsqwanZz0cwK8YOzfezimSN1-sNHapgfhA1nd-qnuccb11jD9yo78nj8amWHYP5jNT6iScsoE-1P2twfGbMgh4yT5Gp8sczpdTaBkkP5B7YfpZi3xJMs5qhvmzDzfqX1yH3MUs_WvMnCIMBxRzRJ_0MP2jUZ3-7_vVP9CUqwuGvjIWgMDc4RlgWkG76n0SLv5dJb3LIo_nof5XsANZeRpkFr7sU8cXvJ_ZRk7JkRmw.bnVsbA
+
+### GET: /accounts
+GET http://localhost:8080/v1/accounts/1 HTTP/1.1
+content-type: application/json
+authorization: Bearer v2.local.dI37w7UkQizjNYClAIEC4CZuWrDenubM4azBjHqeUpJwSsqwanZz0cwK8YOzfezimSN1-sNHapgfhA1nd-qnuccb11jD9yo78nj8amWHYP5jNT6iScsoE-1P2twfGbMgh4yT5Gp8sczpdTaBkkP5B7YfpZi3xJMs5qhvmzDzfqX1yH3MUs_WvMnCIMBxRzRJ_0MP2jUZ3-7_vVP9CUqwuGvjIWgMDc4RlgWkG76n0SLv5dJb3LIo_nof5XsANZeRpkFr7sU8cXvJ_ZRk7JkRmw.bnVsbA
+
+
+### POST: /transfers
+POST http://localhost:8080/v1/transfers HTTP/1.1
+content-type: application/json
+authorization: Bearer v2.local.dI37w7UkQizjNYClAIEC4CZuWrDenubM4azBjHqeUpJwSsqwanZz0cwK8YOzfezimSN1-sNHapgfhA1nd-qnuccb11jD9yo78nj8amWHYP5jNT6iScsoE-1P2twfGbMgh4yT5Gp8sczpdTaBkkP5B7YfpZi3xJMs5qhvmzDzfqX1yH3MUs_WvMnCIMBxRzRJ_0MP2jUZ3-7_vVP9CUqwuGvjIWgMDc4RlgWkG76n0SLv5dJb3LIo_nof5XsANZeRpkFr7sU8cXvJ_ZRk7JkRmw.bnVsbA
+
+{
+    "from_account_id": 1,
+    "to_account_id": 9,
+    "amount": 300,
+    "currency": "CAD"
+}

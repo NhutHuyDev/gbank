@@ -49,11 +49,17 @@ func NewServer(config utils.Config, store db.Store) (*Server, error) {
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
-	authRoutes.GET("/v1/accounts/:id", server.getAccountHandler)
 	authRoutes.GET("/v1/accounts", server.listAccountsHandler)
+	authRoutes.GET("/v1/accounts/:id", server.getAccountHandler)
 	authRoutes.POST("/v1/accounts", server.createAccountHandler)
 
 	authRoutes.POST("/v1/transfers", server.transferHandler)
+
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "not found",
+		})
+	})
 
 	server.router = router
 

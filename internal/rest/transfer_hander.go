@@ -29,7 +29,7 @@ func (server *Server) transferHandler(ctx *gin.Context) {
 		return
 	}
 
-	authPayload := ctx.MustGet(authorizationHeaderKey).(*token.Payload)
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	if authPayload.Username != fromAccount.Owner {
 		err := errors.New("from account doestn't belong to the authenticated user")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
@@ -41,6 +41,18 @@ func (server *Server) transferHandler(ctx *gin.Context) {
 		return
 	}
 
+	toAccount, err := server.store.GetAccount(ctx, req.ToAccountID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	if toAccount.Currency != req.Currency {
+		err := fmt.Errorf("currency of from_account and to_account mismatch: %s vs %s", req.Currency, toAccount.Currency)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
 	arg := db.TransferTxParams{
 		FromAccountID: req.FromAccountID,
 		ToAccountID:   req.ToAccountID,
@@ -49,6 +61,11 @@ func (server *Server) transferHandler(ctx *gin.Context) {
 
 	result, err := server.store.TransferTx(ctx, arg)
 	if err != nil {
+		fmt.Println(err)
+		if err.Error() == "the balance of the from account is insufficient" {
+			ctx.JSON(http.StatusBadRequest, errorResponse(err))
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
