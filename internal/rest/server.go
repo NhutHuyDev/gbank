@@ -39,21 +39,21 @@ func NewServer(config utils.Config, store db.Store) (*Server, error) {
 		v.RegisterValidation("currency", currencyValidator)
 	}
 
-	router.GET("/healthz", func(ctx *gin.Context) {
+	router.GET("/v1/healthz", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": "OKE",
 		})
 	})
-	router.POST("/users", server.createUserHandler)
-	router.POST("/users/sign-in", server.signInHandler)
+	router.POST("/v1/users", server.createUserHandler)
+	router.POST("/v1/users/sign-in", server.signInHandler)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
-	authRoutes.GET("/accounts/:id", server.getAccountHandler)
-	authRoutes.GET("/accounts", server.listAccountsHandler)
-	authRoutes.POST("/accounts", server.createAccountHandler)
+	authRoutes.GET("/v1/accounts/:id", server.getAccountHandler)
+	authRoutes.GET("/v1/accounts", server.listAccountsHandler)
+	authRoutes.POST("/v1/accounts", server.createAccountHandler)
 
-	authRoutes.POST("/transfers", server.transferHandler)
+	authRoutes.POST("/v1/transfers", server.transferHandler)
 
 	server.router = router
 

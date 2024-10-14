@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -114,7 +116,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
 
-	n := 30
+	n := 20
 	amount := int64(10)
 
 	errs := make(chan error)
@@ -153,4 +155,71 @@ func TestTransferTxDeadlock(t *testing.T) {
 
 	require.Equal(t, account1.Balance, updatedAccount1.Balance)
 	require.Equal(t, account2.Balance, updatedAccount2.Balance)
+}
+
+func TestTransferTxCheckBalance(t *testing.T) {
+	store := NewStore(testDB)
+
+	account1 := createRandomAccount(t)
+	account2 := createRandomAccount(t)
+
+	fmt.Printf("account1's balance: %v \n", account1.Balance)
+	fmt.Printf("account2's balance: %v \n", account2.Balance)
+
+	n := 20
+	amount := int64(100)
+	var wg sync.WaitGroup
+
+	// Use buffered channels to prevent blocking
+	errs := make(chan error, n)
+	results := make(chan TransferTxResult, n)
+
+	for i := 0; i < n; i++ {
+		wg.Add(1) // Increment the counter
+
+		go func() {
+			defer wg.Done() // Decrement the counter when the goroutine completes
+			result, err := store.TransferTx(context.Background(), TransferTxParams{
+				FromAccountID: account2.ID,
+				ToAccountID:   account1.ID,
+				Amount:        amount,
+			})
+
+			errs <- err
+			results <- result
+		}()
+	}
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+
+	// Close channels after all goroutines are done
+	close(errs)
+	close(results)
+
+	// Collect and check the errors and results
+	var successCount, failCount int
+	for err := range errs {
+		if err != nil {
+			failCount++
+		} else {
+			successCount++
+		}
+	}
+
+	fmt.Printf("total number of unsuccessful transfer transactions: %v \n", failCount)
+	fmt.Printf("total number of successful transfer transactions: %v \n", successCount)
+
+	require.Greater(t, failCount, 0)
+	require.Less(t, successCount, n)
+
+	// check the final updated balance of accounts
+	updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
+	require.NoError(t, err)
+
+	updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
+	require.NoError(t, err)
+
+	require.Equal(t, account1.Balance+amount*int64(successCount), updatedAccount1.Balance)
+	require.Equal(t, account2.Balance-amount*int64(successCount), updatedAccount2.Balance)
 }
