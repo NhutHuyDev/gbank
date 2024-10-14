@@ -72,7 +72,7 @@ make server
 ```
 
 ## Database Diagram
-![sgbank](https://github.com/user-attachments/assets/a791039e-c755-4d30-8720-7850b3e65f32)<?xml version="1.0" standalone="no"?><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="967.5525071104554" height="436.8694316436253"><style>
+![sgbank](https://github.com/user-attachments/assets/a791039e-c755-4d30-8720-7850b3e65f32)<?xml version="1.0" standalone="no"?><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="967.5525071104554" height="436.8694316436253">
 
 ## API appendix
 
