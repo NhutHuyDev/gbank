@@ -76,14 +76,14 @@ make server
 
 ## API appendix
 
-### User API
+### User APIs
 
 | Method | Endpoint       | Description                     | Request Body Example         | Response Body Example                                       | Authentication |
 |--------|----------------|----------------------------------|----------------------|-------------------------------------------------------------|----------------|
 | POST    | `/v1/users`        | Create a specific user          | `{"username": "nhhuy2002", "full_name": "Nguyen Nhut Huy", "email":"nguyennhuthuy02@gmail.com", "password": "9999999"}`         | `{"username": "nhhuy2002", "full_name": "Nguyen Nhut Huy", "email": "nguyennhuthuy02@gmail.com", "password_changed_at": "0001-01-01T00:00:00Z", "created_at": "2024-10-14T12:06:28.500453Z"}` | No             |
 | POST    | `/v1/users/sign-in`   | Sign in  | `{"username": "nhhuy2002","password": "9999999"}` |  `{"access_token": "v2.local.FjXfgYue2N0OinFgH-OcSuDhwfRXJ_Y6qxXyGasAfD7ofQbmNbGIriNdX-qwKEeJ9z5dyTLToP_TVkLchQ8_gFzbul5kSAga6bW6iiIU9wusCAIa2tn09165-7an4mn1MEO4trvVyrUDjumQmIHUOslyGFWB0J-MUf0H-ekRNnXI4dWHAqhD3ExYqsQMdfbKz3VLom_8kAIIb9hbedBQ5XDocRmgwcodu-ydwepSyha_cd-rZNh2Q4H3a0Qr67ZDK43eerh8IERgkrMIZTI2ew.bnVsbA", "user": {"username": "nhhuy2002", "full_name": "Nguyen Nhut Huy", "email": "nguyennhuthuy02@gmail.com", "password_changed_at": "0001-01-01T00:00:00Z", "created_at": "2024-10-14T08:52:29.241677Z"}}`| No            |
 
-### Account API
+### Account APIs
 
 | Method | Endpoint       | Description                     | Request Body Example         | Response Body Example                                       | Authentication |
 |--------|----------------|----------------------------------|----------------------|-------------------------------------------------------------|----------------|
@@ -91,7 +91,7 @@ make server
 | GET    | `/v1/accounts/:id`   | Get a specific account of the user  | N/A |  `{"account": {"id": 1, "owner": "nhhuy2002", "balance": 0, "currency": "CAD", "created_at": "2024-10-14T12:07:56.383739Z"}}` | Yes            |
 | POST    | `/v1/accounts`   | Create a account with a currency code  | `{"Currency": "CAD"}` | `{"account": {"id": 1, "owner": "nhhuy2002", "balance": 0, "currency": "CAD", "created_at": "2024-10-14T12:07:56.383739Z"}}` | Yes            |
 
-### Transfers API
+### Transfers APIs
 | Method | Endpoint       | Description                     | Request Body Example         | Response Body Example                                       | Authentication |
 |--------|----------------|----------------------------------|----------------------|-------------------------------------------------------------|----------------|
 | POST    | `/v1/transfers`   | Transfer money between two accounts which have same currency code  | `{"from_account_id": 1, "to_account_id": 9, "amount": 300, "currency": "CAD"}` | `{"transfer": {"id": 30, "from_account_id": 1, "to_account_id": 9, "amount": 300, "created_at": "2024-10-14T12:16:45.771039Z"}, "from_account": {"id": 1, "owner": "nhhuy2002", "balance": 700, "currency": "CAD", "created_at": "2024-10-14T12:07:56.383739Z"}, "to_account": {"id": 9, "owner": "mppvlsv", "balance": 768, "currency": "CAD", "created_at": "2024-10-14T12:15:13.682382Z"}, "from_entry": {"id": 59, "account_id": 1, "amount": -300, "created_at": "2024-10-14T12:16:45.771039Z"}, "to_entry": {"id": 60, "account_id": 9, "amount": 300, "created_at": "2024-10-14T12:16:45.771039Z"}}` | Yes            |
