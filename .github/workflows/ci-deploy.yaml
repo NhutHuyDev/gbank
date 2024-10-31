@@ -22,7 +22,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Load secrets and save to app.env
-        uses: aws secretsmanager get-secret-value --secret-id prod/sgbank --query SecretString --output text --profile sgbank-github-ci | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]'
+        uses: aws secretsmanager get-secret-value --secret-id prod/sgbank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]'
 
       - name: Build, tag, and push docker image to Amazon ECR
         env:
